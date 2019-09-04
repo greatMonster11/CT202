@@ -1,2 +1,2 @@
 # CT202
-Machine Learning Theorety
+Machine Learning Theory
