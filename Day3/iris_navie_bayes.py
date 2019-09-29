@@ -21,7 +21,6 @@ thucte = y_test
 dubao = model.predict(X_test)
 thucte
 dubao
-
 # Danh gia giai thuat
 cnf_matrix_gnb = confusion_matrix(thucte, dubao)
 print(cnf_matrix_gnb)
