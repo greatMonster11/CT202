@@ -1,47 +1,49 @@
-from sklearn.model_selection import KFold
-from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
 import pandas as pd
 
 # Read data
 wineWhite = pd.read_csv("winequality-white.csv", delimiter=";", quotechar='"')
+X = wineWhite.iloc[:, 0:11]
+y = wineWhite.iloc[:, 11:12]
 
+from sklearn.model_selection import KFold
 # Use KFold to split data
 # Devide data into 100 parts and make a shuffle on data
 kf = KFold(n_splits=100, shuffle=True)
 
-X = wineWhite.iloc[:, 0:11]
-y = wineWhite.iloc[:, 11:12]
-
+from sklearn.naive_bayes import GaussianNB
 model = GaussianNB()
-# Phan chia du lieu
+
+loop_counter = 1
+sum_accuracy = 0
+
+# Phan chia du lieu 
 for train_index, test_index in kf.split(wineWhite):
-	print("TRAIN:", train_index, "TEST:", test_index)
- 	X_train, X_test = X.iloc[train_index, ], X.iloc[test_index, ]
+	#print("TRAIN:", train_index, "TEST:", test_index)
+    X_train, X_test = X.iloc[train_index, ], X.iloc[test_index, ]
     y_train, y_test = y.iloc[train_index], y.iloc[test_index]
-    # huan luyen mo hinh
-	model.fit(X_train, y_train)
-	# du doan
-	prediction = model.predict(X_test)
-	last_result_Matrix = confusion_matrix(y_test, )
 
-# Xay dung va huan luyen mo hinh
+    # train model        
+    model.fit(X_train, y_train)
 
+    # prediction
+    y_pred = model.predict(X_test)
+    last_result_Matrix = confusion_matrix(y_test, y_pred)
+    loop_counter += 1
 
-# Du bao
-reality = y_test
-prediction = model.predict(X_test)
-reality
-prediction
+    # Cau 4
+    # do chinh xac cua tung lan lap
+    # print("Do chinh xac cua lan lap thu", loop_counter, "la: ", accuracy_score(y_test, y_pred)*100)
+    # Do chinh xac cua lan lap thu 100 la:  43.75
 
-# Danh gia giai thuat
-cnf_matrix_gnb = confusion_matrix(reality, prediction)
-cnf_matrix_gnb
-### Result
-array([[ 1,  0,  0,  1,  0],
-       [ 2,  8,  3,  0,  0],
-       [ 0,  8,  5, 10,  0],
-       [ 0,  0,  1,  5,  0],
-       [ 1,  1,  1,  1,  0]])
+    # do chinh xac tong the cua cac lan lap
+    sum_accuracy += accuracy_score(y_test, y_pred)
 
-# Cau 4
+# Cau 5
+print("Do chinh xac trung binh tong the la", sum_accuracy / loop_counter)
+# Do chinh xac trung binh tong the la 0.4424883814912101
+
+# Cau 6
+# Do chinh xac cua navie-bayes thap hon decision-tree
+
