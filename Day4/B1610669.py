@@ -53,21 +53,16 @@ def LR2(X, Y, eta, lanlap, theta0, theta1):
     theta11 = theta1
     for i in range(0, lanlap):
         print("Lan lap: ", i)
-        for j in range(0, m):
-            # theta0
-            h = theta0 + theta11*X[j]
-            theta0 = theta0 + eta*(Y[j] - h)*1
-            print("Phan tu ", j, "y= ", Y[j],
-                  "h= ", h, "gia tri theta0= ", theta0)
+        h = 0
+        # theta0
+        for j in range(0, m): 
+            h += Y[j] - (theta00 + theta11*X[j])
+        theta0 = theta0 + eta*h*1
 
-            # theta1
-            h = theta00 + theta1*X[j]
-            theta1 = theta1 + eta*(Y[j] - h)*X[j]
-            print("Pha tu: ", j, "gia tri theta1 = ", theta1)
-            theta00 = theta0
-            theta11 = theta1
-        print("theta00 = ", theta00)
-        print("theta11 = ", theta11)
+        # theta1
+        for j in range(0, m): 
+            h += Y[j] - (theta00 + theta11*X[j])
+        theta1 = theta1 + eta*h*1
     return [theta0, theta1]
 
 
