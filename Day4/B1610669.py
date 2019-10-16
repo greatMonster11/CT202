@@ -53,22 +53,25 @@ def LR2(X, Y, eta, lanlap, theta0, theta1):
     theta11 = theta1
     for i in range(0, lanlap):
         print("Lan lap: ", i)
-        h = 0
-        # theta0
-        for j in range(0, m): 
-            h += Y[j] - (theta00 + theta11*X[j])
-        theta0 = theta0 + eta*h*1
 
-        # theta1
-        for j in range(0, m): 
-            h += Y[j] - (theta00 + theta11*X[j])
-        theta1 = theta1 + eta*h*1
+        # compute the gradient
+        grad0 = 1.0/m * sum([(theta00 + theta11*X[i] - Y[i])
+                             for i in range(m)])
+        grad1 = 1.0/m * sum([(theta00 + theta11*X[i] - Y[i])*X[i]
+                             for i in range(m)])
+
+        # update the theta_temp
+        theta00 = theta00 - eta * grad0
+        theta11 = theta11 - eta * grad1
+
+        # update theta
+        theta0 = theta00
+        theta1 = theta11
+
+        print("theta00 = ", theta00)
+        print("theta11 = ", theta11)
     return [theta0, theta1]
 
-
-theta = LR2(X, Y, 0.2, 1, 0, 1)  # theta 1 buoc
-X1 = np.array([1, 6])
-Y1 = theta[0] + theta[1]*X1
 
 theta2 = LR2(X, Y, 0.2, 2, 0, 1)  # theta 2 buoc lap
 X2 = np.array([1, 6])
@@ -77,16 +80,13 @@ Y2 = theta2[0] + theta2[1]*X2
 ### Ve duong hoi quy ###
 plt.axis([0, 7, 0, 10])  # dinh khung cho bieu do
 plt.plot(X, Y, "ro", color="blue")
-
-plt.plot(X1, Y1, color="violet")
 plt.plot(X2, Y2, color="green")
-
 plt.xlabel("Gia tri thuoc tinh X")
 plt.ylabel("Gia tri thuoc tinh Y")
 plt.show()
 
 #### Du bao cho phan tu moi toi ####
 XX = [0, 3, 5]
-for i int range(0, 3):
-    YY = theta[0] + theta[1]*XX[i]
+for i in range(0, 3):
+    YY = theta2[0] + theta2[1]*XX[i]
     print(round(YY, 3))
